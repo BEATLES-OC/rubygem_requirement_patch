@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+patch_file = '/tmp/rubygems.patch'
+
+if ruby_info = `which rvm && rvm info homes`.split(/\n/).grep(/^\s*ruby:/).first
+  ruby_home = File.join(ruby_info.gsub(/^\s*ruby:\s*"([^"]+)"/, '\1'), 'lib/ruby')
+else
+  ruby_home = '/usr/local/lib'
+end
+
+patch_target = File.join(ruby_home, 'site_ruby/1.8/rubygems/requirement.rb')
+
+unless File.exists?(patch_target)
+  $stderr.puts "Unable to locate rubygems installation; tried #{patch_target}"
+  exit 1
+end
+
+File.open(patch_file, 'w') do |io|
+  io.write <<-END_PATCH
+--- requirement.rb.orig
++++ requirement.rb
+@@ -106,7 +106,7 @@
+   end
+
+   def hash # :nodoc:
+-    requirements.hash
++    requirements.inject(0) { |h, r| h ^ r.first.hash ^ r.last.hash }
+   end
+  END_PATCH
+end
+
+command = "patch -N -r /tmp/rubygems.patch.rej #{patch_target} #{patch_file}"
+puts command
+system command

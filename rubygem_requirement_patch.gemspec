@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "rubygem_requirement_patch"
   s.version     = RubygemRequirementPatch::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["EMI Music"]
+  s.email       = ["stephan.zuercher@emimusic.com"]
+  s.homepage    = "http://emi.github.com"
+  s.summary     = %q{Patches rubygems 1.3.7 and similar to prevent Array.hash bug}
+  s.description = %q{Patches rubygems 1.3.7 and similar to prevent Array.hash bug}
 
   s.rubyforge_project = "rubygem_requirement_patch"
 
