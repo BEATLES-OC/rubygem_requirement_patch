@@ -1,0 +1,3 @@
+module RubygemRequirementPatch
+  # Your code goes here...
+end
