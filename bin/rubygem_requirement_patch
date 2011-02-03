@@ -2,16 +2,22 @@
 
 patch_file = '/tmp/rubygems.patch'
 
-if ruby_info = `which rvm && rvm info homes`.split(/\n/).grep(/^\s*ruby:/).first
-  ruby_home = File.join(ruby_info.gsub(/^\s*ruby:\s*"([^"]+)"/, '\1'), 'lib/ruby')
-else
-  ruby_home = '/usr/local/lib'
+gem_location = `which gem`.strip
+if gem_location.nil? || gem_location == ''
+  $stderr.puts "Unable to locate rubygems installation; cannot find gem executable"
+  exit 1
 end
 
-patch_target = File.join(ruby_home, 'site_ruby/1.8/rubygems/requirement.rb')
+rubygems_info = `gem which rubygems`.strip
+if rubygems_info.nil? || rubygems_info == ''
+  $stderr.puts "Unable to locate rubygems installation; gem which rubygems failed"
+  exit 2
+end
+
+patch_target = File.join(File.dirname(rubygems_info), 'rubygems', 'requirement.rb')
 
 unless File.exists?(patch_target)
-  $stderr.puts "Unable to locate rubygems installation; tried #{patch_target}"
+  $stderr.puts "Unable to locate rubygems installation; tried '#{patch_target}'"
   exit 1
 end
 
